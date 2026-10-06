@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Abbey ❤️</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap');
+
+  :root {
+    --maroon: #641b2b;
+    --deep: #3c0e19;
+    --cream: #fffaf7;
+    --paper: #fffdfb;
+    --rose: #ead0d3;
+    --muted: #8b6970;
+    --shadow: 0 20px 60px rgba(60,14,25,.12);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--deep);
+    background:
+      radial-gradient(circle at 10% 10%, rgba(234,208,211,.55), transparent 28%),
+      radial-gradient(circle at 90% 30%, rgba(100,27,43,.08), transparent 25%),
+      var(--cream);
+    font-family: "DM Sans", sans-serif;
+  }
+
+  body::before {
+    content: "♡";
+    position: fixed;
+    top: 5vh;
+    left: 4vw;
+    color: rgba(100,27,43,.06);
+    font-size: 18rem;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  header {
+    text-align: center;
+    padding: 72px 24px 40px;
+    position: relative;
+  }
+
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: .24em;
+    font-size: .72rem;
+    font-weight: 600;
+    color: var(--maroon);
+    margin-bottom: 14px;
+  }
+
+  h1, h2, .letter-title {
+    font-family: "Cormorant Garamond", serif;
+  }
+
+  h1 {
+    font-size: clamp(4rem, 11vw, 8rem);
+    line-height: .78;
+    margin: 0;
+    color: var(--maroon);
+    font-weight: 600;
+  }
+
+  .subtitle {
+    max-width: 570px;
+    margin: 28px auto 0;
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .today {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 22px;
+    padding: 9px 15px;
+    border: 1px solid var(--rose);
+    border-radius: 999px;
+    background: rgba(255,255,255,.65);
+    color: var(--maroon);
+    font-size: .8rem;
+  }
+
+  main {
+    width: min(1050px, calc(100% - 32px));
+    margin: 0 auto 90px;
+  }
+
+  .progress-wrap {
+    background: rgba(255,255,255,.75);
+    border: 1px solid var(--rose);
+    border-radius: 22px;
+    padding: 18px 20px;
+    margin-bottom: 28px;
+    box-shadow: 0 8px 30px rgba(60,14,25,.05);
+  }
+
+  .progress-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    font-size: .78rem;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .progress {
+    height: 7px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: #f1e5e6;
+  }
+
+  .progress > div {
+    height: 100%;
+    width: 20%;
+    background: var(--maroon);
+    border-radius: inherit;
+    transition: width .5s ease;
+  }
+
+  .letters {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+
+  .letter {
+    min-height: 190px;
+    position: relative;
+    border: 1px solid var(--rose);
+    border-radius: 22px;
+    background: var(--paper);
+    padding: 24px;
+    cursor: pointer;
+    text-align: left;
+    color: var(--deep);
+    box-shadow: 0 8px 25px rgba(60,14,25,.055);
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+
+  .letter:hover:not(.locked) {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow);
+    border-color: #c99ca3;
+  }
+
+  .letter.locked {
+    cursor: not-allowed;
+    background: #f7eeee;
+    color: #a99398;
+  }
+
+  .number {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 3.2rem;
+    line-height: 1;
+    color: var(--maroon);
+    font-weight: 600;
+  }
+
+  .locked .number { color: #bda8ac; }
+
+  .label {
+    margin-top: 12px;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1.45rem;
+    font-weight: 600;
+  }
+
+  .status {
+    position: absolute;
+    top: 22px;
+    right: 20px;
+    font-size: .72rem;
+    color: var(--muted);
+  }
+
+  .heart {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    color: var(--maroon);
+    font-size: 1.15rem;
+  }
+
+  .locked .heart { color: #c9b6ba; }
+
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1.2rem;
+    padding: 0 20px 50px;
+  }
+
+  /* Letter modal */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: none;
+    place-items: center;
+    padding: 20px;
+    background: rgba(44,8,17,.58);
+    backdrop-filter: blur(7px);
+  }
+
+  .overlay.show { display: grid; }
+
+  .modal {
+    width: min(680px, 100%);
+    max-height: 88vh;
+    overflow: auto;
+    background: var(--paper);
+    border-radius: 28px;
+    padding: clamp(28px, 6vw, 58px);
+    box-shadow: 0 35px 100px rgba(20,0,5,.28);
+    position: relative;
+  }
+
+  .close {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    width: 38px;
+    height: 38px;
+    border: 0;
+    border-radius: 50%;
+    background: #f4e5e7;
+    color: var(--maroon);
+    font-size: 1.3rem;
+    cursor: pointer;
+  }
+
+  .modal .number {
+    font-size: 1.2rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+
+  .modal h2 {
+    color: var(--maroon);
+    font-size: clamp(2.5rem, 7vw, 4.2rem);
+    line-height: .95;
+    margin: 12px 0 28px;
+  }
+
+  .modal p {
+    white-space: pre-line;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1.45rem;
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  .signature {
+    margin-top: 30px;
+    color: var(--maroon);
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1.6rem;
+  }
+
+  @media (max-width: 760px) {
+    .letters { grid-template-columns: repeat(2, 1fr); }
+    header { padding-top: 52px; }
+  }
+
+  @media (max-width: 480px) {
+    .letters { grid-template-columns: 1fr; }
+    .letter { min-height: 150px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">A little something for my darling girl.</div>
+  <h1>Abbey</h1>
+  <p class="subtitle">
+    15 days away so here are 15 little reminders of ways in which I love and adore you sweetie
+  </p>
+  <div class="today" id="today"></div>
+</header>
+
+<main>
+  <section class="progress-wrap">
+    <div class="progress-top">
+      <span id="progressText">3 of 15 letters unlocked</span>
+      <span id="nextText">Letter 4 opens tomorrow ♡</span>
+    </div>
+    <div class="progress"><div id="progressBar"></div></div>
+  </section>
+
+  <section class="letters" id="letters"></section>
+</main>
+
+<footer>
+  Made with love, one letter at a time. ♡
+</footer>
+
+<div class="overlay" id="overlay" onclick="closeModal(event)">
+  <article class="modal">
+    <button class="close" aria-label="Close" onclick="closeModal()">×</button>
+    <div class="number" id="modalNumber"></div>
+    <h2 id="modalTitle"></h2>
+    <img id="letterImage" alt="Letter picture" style="display:none;width:100%;max-height:620px;object-fit:contain;border-radius:18px;margin:0 0 22px;box-shadow:0 12px 35px rgba(60,14,25,.14);"><p id="modalBody"></p>
+    <div class="signature">Always yours, ♡</div>
+  </article>
+</div>
+
+<script>
+/*
+  EDIT YOUR 15 LETTERS HERE.
+  The site automatically unlocks letter 1 on October 1,
+  letter 2 on October 2, ... letter 15 on October 15.
+*/
+const letters = [
+  { title: "Day 1", body: `Today is the day of departure my beloved, we are going to have a lovely day today together connecting and cuddling and possibly (definitely) a bit of crying. BUT everything is going to be okay my sweet girl, I promise to be safe and cozy and honour you throughout my girl. And I also know my beautiful strong amazing girl is going to be okay also. I love you poppet xx` },
+  { title: "Day 2", body: `Hey my beautiful girl, I miss you already!!! this is the first note I leave for you my bubba. I know your maybe feeling a bit anxious and missing your sexy handsome boyfriend SOOO much (and I’m missing you more) but I promise it’s gonna go quick and I’m going to be very active bubba and always letting you know every aspect of my days.
+
+I know I’m going to miss you so much and cry a bit. Even though the feeling of saying bye to you and knowing I’m not going to be able to hold you for a while feels like shit I can’t help but to recognize what a gift it is to have such a deep love for another that just even 1 night doesn’t feel right haha. It’s so beautiful - it hurts but feels so blissful at the same time. Not only do I cherish my own given perspective of you sweetie, but when I even take a further step back and just look at our love and relationship from a 3rd person perspective, seeing the ways our life’s and souls intertwine is “sets my heart a blaze”` },
+  { title: "Day 3", body: `Hello my princesses today it day 2 woo hoo 1 day down only 13 more sleeps away. Missed waking up next to you my love, just remembering and imagining waking next to you all cozied up and being mesmerized by your gorgeous sleeping face that always needs atleast 10 forehead kisses before depart back home. AWH MAN just writing that makes me miss you more.
+
+Been on some good drives around the country today, seeing all the beautiful green terrain, filled with nostalgia it’s almost perfect … only thing missing is sharing it with you.
+
+I love you so much poppet have a great day my darling xx` },
+  { title: "Day 4", body: "Another day down, my pretty girl. I hope you’ve had a lovely Sunday, darling, ready to smash next week. I’m so proud of you bubba, studying hard as fuck with Uni pushing through content which, previously, even the idea of was daunting, and now along with that taking uncomfortable actions and getting a bodybuilding coach - all with me being away. I don’t love, respect and cherish you for your results bubba but the hard work and decisions behind them. I’m so proud of you bub  xx\n\nFun fact mate seahorses and the ones that get railed and impregnated - along with that actually give birth to hundreds if not THOUSANDS of baby seahorses. And actually have romantic relationships some seahorses dance with their partner while simultaneously changing colors and intertwining tails 🌊✨" },
+  { title: "Day 5", body: "Another day DOWNNNN my poppet, officially next week I’ll be home wooo hooo. Pretty exciting day for you my girl - first COACHING CALL. I’m so proud of you bub, taking direct and uncomfortable action congruent to the amazing woman you are and will continue to be. I know you’re probably nervous, anxious, and hopefully excited but I can tell you that’s how it’s supposed to feel and should feel - FEEL IT ALL because those exact emotions are going to the emotions that are going to make sure smash it out of the park. I still remember hopping on my first call to invest into myself and learn from someone else - best thing I ever did and its going to be the best thing for you also bubba - just lean in my girl, its crazy wants achievable if you do xx. So proud sweetie.\n\nNow QUIZZZ TIME and the theme is PRETTY LITTLE LIARS! (No googling! - please send answers to me on WhatsApp)\n\n1. What town is PPL set in?\n2. What is tanner’s first name?\n3. When did PLL first air?\n\nA) August 5th 2008\nB) June 8th 2010\nC) November 30th 2004\nD) July 2nd 2010\n\n4. Who was the original -A?\n5. What season did Alison return to school?" },
+  { title: "Day 6", body: "Good morning my princess. I know you’ve got a meth chem lab today, sounds fun(Don’t snort too much)! I know you’re feeling a bit anxious, but I know you’re going to enjoy it bubba it’s always just so scary in the mind and without me being able to cuddle you after and yap in person. And I kinda feel the same too. Took one call today that didn’t go so well and I just get all anxious in my head now, anxious about how my comms are going to be this month, if I’m bad at sales, if I’m not really the person who others might believe I am, if I’m even strong enough to do it. All this noise and then. Just got a zoom out, remember I’ve got you and more my girl. Let’s go through the scary together bubba, because with you It does’t feel so big xx So proud of you bub.\n\nAlso, I went and fed the ducks today, so here are some duck facts\n\n1. Ducks have corkscrew looking penis’s\n2. Ducks can actually “sleep with one eye open” they can manually shut off one side of there brain and keep the other side active, keeping a look out for predators.\n3. Ducks feet have anti heat genetics making sure they stay cozy when its cold\n4. Some ducks are fast as heck reaching up to 100k/m+ per hour DAM" },
+  { title: "Day 7", body: "Letter coming soon ♡" },
+  { title: "Day 8", body: "Letter coming soon ♡" },
+  { title: "Day 9", body: "Letter coming soon ♡" },
+  { title: "Day 10", body: "Letter coming soon ♡" },
+  { title: "Day 11", body: "Letter coming soon ♡" },
+  { title: "Day 12", body: "Letter coming soon ♡" },
+  { title: "Day 13", body: "Letter coming soon ♡" },
+  { title: "Day 14", body: "Letter coming soon ♡" },
+  { title: "Day 15", body: "Letter coming soon ♡" }
+];
+
+function unlockedCount() {
+  const now = new Date();
+  // October 1–15: day number determines how many are open.
+  // Before Oct 1: none. From Oct 15 onward: all 15.
+  if (now.getMonth() !== 9) return now.getMonth() > 9 ? 15 : 0;
+  return Math.min(Math.max(now.getDate(), 0), 15);
+}
+
+function formatDate() {
+  return new Intl.DateTimeFormat("en-NZ", {
+    weekday: "long", day: "numeric", month: "long", year: "numeric"
+  }).format(new Date());
+}
+
+function render() {
+  const count = unlockedCount();
+  document.getElementById("today").textContent = "♡ " + formatDate() + " ♡";
+  document.getElementById("progressText").textContent =
+    `${count} of 15 letter${count === 1 ? "" : "s"} unlocked`;
+  document.getElementById("progressBar").style.width = `${(count / 15) * 100}%`;
+
+  const next = document.getElementById("nextText");
+  if (count >= 15) next.textContent = "All 15 letters are yours ♡";
+  else if (count === 0) next.textContent = "The first letter opens on October 1 ♡";
+  else next.textContent = `Letter ${count + 1} opens tomorrow ♡`;
+
+  const grid = document.getElementById("letters");
+  grid.innerHTML = "";
+
+  letters.forEach((letter, i) => {
+    const number = i + 1;
+    const isOpen = number <= count;
+    const card = document.createElement("button");
+    card.className = "letter" + (isOpen ? "" : " locked");
+    card.type = "button";
+    card.setAttribute("aria-label", isOpen ? `Open letter ${number}` : `Letter ${number} is locked`);
+    card.innerHTML = `
+      <span class="status">${isOpen ? "OPEN" : "LOCKED"}</span>
+      <div class="number">${String(number).padStart(2, "0")}</div>
+      <div class="label">${isOpen ? letter.title : "A letter for later"}</div>
+      <div class="heart">${isOpen ? "♥" : "♡"}</div>
+    `;
+    if (isOpen) card.onclick = () => openLetter(number);
+    grid.appendChild(card);
+  });
+}
+
+function openLetter(number) {
+  const letter = letters[number - 1];
+  document.getElementById("modalNumber").textContent = `Letter ${String(number).padStart(2, "0")}`;
+  document.getElementById("modalTitle").textContent = letter.title;
+  document.getElementById("modalBody").textContent = letter.body;
+  const letterImage = document.getElementById("letterImage");
+  const letterImages = {4: "day4.png", 6: "day6.png"};
+  if (letterImages[number]) {
+    letterImage.src = letterImages[number];
+    letterImage.style.display = "block";
+  } else {
+    letterImage.removeAttribute("src");
+    letterImage.style.display = "none";
+  }
+  document.getElementById("overlay").classList.add("show");
+  document.body.style.overflow = "hidden";
+}
+
+function closeModal(event) {
+  if (!event || event.target.id === "overlay" || event.target.classList.contains("close")) {
+    document.getElementById("overlay").classList.remove("show");
+    document.body.style.overflow = "";
+  }
+}
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") closeModal();
+});
+
+render();
+</script>
+</body>
+</html>
